@@ -1,0 +1,54 @@
+
+# AUNTHICATION SYSTEM
+
+## SERVER SETUP
+    - npm init
+    - setup server syntax 
+    - connect mongodb
+
+## setup folder structure
+    [create model, router, controller]
+
+    - auth model Schema [username, email, password]
+    -setup as middleware in server.js [app.use('/api/auth', router)] ::import router defines route of signup & login
+    -in auth-router: import auth-controller and [router.route('/register').post(authController.register)]
+    - authController import[user-model]
+
+    ------register-----
+
+    const register = async (req, res) => {
+        try{
+
+            1. get all data from req.body
+            2. validate data
+            3. cheack user already exist or not based on -email
+            4. hash password X do in model schema
+            5. save user data in db
+            6.send data and token
+
+
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+
+    ------login-----
+
+    const login = async (req, res) => {
+        try{
+
+            1. get all data from req.body
+            2. validate data
+            3. find user already exist or not based on -email
+            4. hash password X do in model schema
+            5. save user data in db
+            6.send data and token
+
+
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
