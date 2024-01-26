@@ -10,7 +10,7 @@ export const userData =[
     "focus_time": "14h",
     "sex": "boy",
     "interests": ["Podcasts", "Gaming", "Cooking"],
-    "imageUrl": "https://robohash.org/1.png?set=set1",
+    "imageUrl": "https://cswcdn.azureedge.net/featureimages/36.jpg",
     "about": "I'm a random person with id 1."
   },
   {

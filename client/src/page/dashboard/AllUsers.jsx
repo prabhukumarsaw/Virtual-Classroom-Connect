@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserCard from "../../components/UserCard.jsx";
-import { userData } from "../../assets/data.jsx";
+
 import Modal from "react-modal";
 
 // Make sure to set appElement to satisfy accessibility requirements
@@ -19,7 +19,8 @@ const customStyles = {
     },
   };
 
-const AllUsers = () => {
+// eslint-disable-next-line react/prop-types
+const AllUsers = ({userData}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 

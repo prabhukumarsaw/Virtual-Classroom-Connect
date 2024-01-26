@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import AllUsers from '../page/dashboard/AllUsers'
-import CreateRoom from '../page/dashboard/CreateRoom'
 
-const Main = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
 
+const Room = () => {
+   
       
 
   return (
@@ -18,7 +17,7 @@ const Main = () => {
       </svg>
     </div>
     <div className="flex mx-auto flex-grow mt-4 flex-col text-gray-400 space-y-4">
-      <Link to='' className="h-10 w-12 dark:text-gray-500 rounded-md flex items-center justify-center bg-blue-100 text-blue-500">
+      <Link to='/' className="h-10 w-12 dark:text-gray-500 rounded-md flex items-center justify-center bg-blue-100 text-blue-500">
         <svg viewBox="0 0 24 24" className="h-5" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -47,15 +46,11 @@ const Main = () => {
       </Link>
     </div>
   </div>
-  <div className="flex-grow overflow-hidden h-full flex flex-col" style={{ background: "url(https://cswcdn.azureedge.net/featureimages/ee9a962f-6288-405f-96b8-ca3eff485bbe.png) no-repeat", backgroundSize: "cover" }}>
-  <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden  px-10">
+  <div className="flex-grow overflow-hidden h-full flex flex-col ">
+    <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden  px-10">
      
       <div className="ml-auto flex items-center h-10 space-x-7">
-        <button 
-        onClick={() => setModalOpen(true)}
-         className="h-8 px-3 rounded-md shadow text-white bg-blue-500">+ Create Room</button>
-         <CreateRoom isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
-
+        <button className="h-8 px-3 rounded-md shadow text-white bg-blue-500">+ Create Room</button>
 
         <button className="flex items-center">
           <span className="relative flex-shrink-0">
@@ -69,12 +64,34 @@ const Main = () => {
         </button>
       </div>
     </div>
-  <Outlet/>
+    <div className="flex-grow flex overflow-x-hidden">
+    <div className="flex-grow  dark:bg-gray-900 overflow-y-auto">
+    <Outlet/>
+      </div>
 
+
+      <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full overflow-y-auto lg:block hidden p-5">
+      
+
+        <div className="text-xs text-gray-400 tracking-wider">Users Community</div>
+        <div className="relative mt-2">
+          <input type="text" className="pl-8 h-9 bg-transparent border border-gray-300 dark:border-gray-700 dark:text-white w-full rounded-md text-sm" placeholder="Search" />
+          <svg viewBox="0 0 24 24" className="w-4 absolute text-gray-400 top-1/2 transform translate-x-0.5 -translate-y-1/2 left-2" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <div className="space-y-4 mt-3">
+          <AllUsers/>
+          
+        </div>
+      </div>
+      
+    </div>
   </div>
 </div>
     </div>
   )
 }
 
-export default Main
+export default Room
