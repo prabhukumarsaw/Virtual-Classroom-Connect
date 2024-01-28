@@ -25,8 +25,8 @@ const Card = ({ imageUrl, title }) => {
       <div className="ml-4 w-12 h-12 relative -mt-8 border-2 border-white rounded-full overflow-hidden">
         <img
           className="object-cover object-center h-12"
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
-          alt="Woman looking front"
+          src={imageUrl}
+          alt={title}
         />
       </div>
 
@@ -34,7 +34,7 @@ const Card = ({ imageUrl, title }) => {
         <div className="flex items-center ">
           <div className="ml-2 flex flex-col">
             <div className="leading-snug text-sm text-gray-900 font-bold">
-              Jane doe
+              {title}
             </div>
             <div className="leading-snug text-xs text-gray-600 pr-1">
               Join my study room to boost your focus & get stuff done together!

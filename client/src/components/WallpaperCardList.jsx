@@ -1,63 +1,56 @@
-// // components/ImageCardList.js
+import React from 'react';
 
-// import React from 'react';
+const WallpaperCardList = () => {
+  return (
+    <>
+      <div className="ml-2.5 mr-2 hover:!scale-105 xl:mr-0 flex h-[30px] items-center justify-center rounded-full text-white group cursor-pointer transition duration-150 hover:scale-110 hover:bg-primary">
+        <div className="flex w-full items-center">
+          <div className="relative h-[30px] w-[30px] shrink-0 animate-spin-slow overflow-hidden rounded-full border-2 border-white md:h-[28px] md:w-[28px] xl:h-[30px] xl:w-[30px]">
+            <span style={{
+              boxSizing: 'border-box',
+              display: 'block',
+              overflow: 'hidden',
+              width: 'initial',
+              height: 'initial',
+              background: 'none',
+              opacity: 1,
+              border: '0px',
+              margin: '0px',
+              padding: '0px',
+              position: 'absolute',
+              inset: '0px',
+            }}>
+              <img
+                src="https://imagedelivery.net/URWwH1XbHXrZ6YK63EZXdw/7348beb1-8b42-4486-e409-acb500457900/thumbnail"
+                decoding="async"
+                data-nimg="fill"
+                style={{
+                  position: 'absolute',
+                  inset: '0px',
+                  boxSizing: 'border-box',
+                  padding: '0px',
+                  border: 'none',
+                  margin: 'auto',
+                  display: 'block',
+                  width: '0px',
+                  height: '0px',
+                  minWidth: '100%',
+                  maxWidth: '100%',
+                  minHeight: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </span>
+          </div>
+          <div className="relative mx-2 hidden max-w-[170px] overflow-hidden truncate text-sm text-white xs:block md:hidden xl:block">
+            follow your heart. 👒 studio ghibli lofi mix
+          </div>
+        </div>
+      </div>
+      
+    </>
+  );
+};
 
-// const ImageCardList = ({ imageCards }) => {
-
-    
-//   return (
-//     <div className="flex flex-wrap justify-center">
-//       {imageCards.map((card, index) => (
-//         <div
-//           key={index}
-//           className="w-48 h-64 m-4 bg-cover bg-center relative"
-//           style={{ backgroundImage: `url(${card.imageUrl})` }}
-//         >
-//           <div className="absolute inset-0 bg-black opacity-50"></div>
-//           <div className="absolute inset-0 flex items-center justify-center">
-//             <p className="text-white text-lg font-bold">{card.title}</p>
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default ImageCardList;
-// <div className="text-left mx-3 my-2">
-// <h3 className="text-xs font-bold p-2">Select Image *</h3>
-
-// {/* Include the ImageCardList component here */}
-// <ImageCardList imageCards={imageCards} />
-
-// {/* Add file input if necessary */}
-// <label
-//   htmlFor="image"
-//   className="cursor-pointer border-2 border-gray-300 p-4 rounded-md flex items-center justify-center"
-// >
-//   <svg
-//     className="w-6 h-6 text-gray-500"
-//     fill="none"
-//     stroke="currentColor"
-//     viewBox="0 0 24 24"
-//     xmlns="http://www.w3.org/2000/svg"
-//   >
-//     <path
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//       strokeWidth="2"
-//       d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-//     ></path>
-//   </svg>
-//   <span className="ml-2 text-sm leading-5 font-medium text-gray-700">
-//     Choose an image
-//   </span>
-//   <input
-//     id="image"
-//     name="image"
-//     type="file"
-//     className="hidden"
-//     // Add any additional attributes or event handlers as needed
-//   />
-// </label>
-// </div>
+export default WallpaperCardList;

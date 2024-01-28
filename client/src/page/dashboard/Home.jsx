@@ -4,6 +4,7 @@ import AllUsers from '../dashboard/AllUsers'
 import Title from '../../components/Title.jsx';
 import SoloCard from '../../components/SoloCard.jsx';
 import RecentRoom from '../../components/RecentRoom.jsx';
+import TabNavigation from '../../components/TabNavigation.jsx';
 
 const Home = () => {
 
@@ -19,6 +20,8 @@ const Home = () => {
     
     <div className="flex-grow dark:bg-gray-900 overflow-y-auto bg-cover bg-center" >
     <Title/>
+
+    <TabNavigation/>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3  gap-4 m-4">
         <RecentRoom/>
       </div>
@@ -47,3 +50,4 @@ const Home = () => {
 }
 
 export default Home
+

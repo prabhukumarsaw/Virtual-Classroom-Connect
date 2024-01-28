@@ -5,6 +5,7 @@ import GlobalRoom from "../page/dashboard/GlobalRoom";
 import AuthFragment from '../page/Authentication/SignIn'
 import SignUp from "../page/Authentication/SignUp";
 import Room from "../layout/Room";
+import RoomHome from "../page/classroom/RoomHome";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <RoomHome />,
       },
       {
         path: "globalfragment",
