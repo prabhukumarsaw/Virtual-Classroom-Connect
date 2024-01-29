@@ -1,27 +1,35 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GiNotebook } from "react-icons/gi";
-import UtilDialog from '../components/UtilDialog'
+import UtilDialog from '../components/UtilDialog';
+
 
 const WidgetNav = ({
   handleShowWidget,
   handleHideWidget,
   handleToggleDrawer,
+  YouTube,
+  handleVideoSelect,
 }) => {
-  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isToggleOpen, setToggleOpen] = useState(false);
+  const [isToggleOpenYt, setToggleOpenYt] = useState(false);
 
-  const openDialog = () => {
-    setDialogOpen(true);
+  const toggleToggle = () => {
+    setToggleOpen(!isToggleOpen);
+    // Close YouTube toggle if open
+    setToggleOpenYt(false);
   };
 
-  const closeDialog = () => {
-    setDialogOpen(false);
+  const toggleYoutube = () => {
+    setToggleOpenYt(!isToggleOpenYt);
+    // Close regular toggle if open
+    setToggleOpen(false);
   };
 
   return (
     <div className="hidden md:block relative">
       <div className="mb-0 bg-opacity-30 bg-gray-800 p-2 flex justify-start items-center backdrop-filter backdrop-blur-md rounded-2xl ">
-        {/* Existing buttons */}
+        {/* Toggle button */}
         <button
           onClick={handleShowWidget}
           className="p-2 bg-green-500 hover:bg-green-700 text-white rounded"
@@ -40,11 +48,12 @@ const WidgetNav = ({
         >
           <GiNotebook />
         </button>
-
-        {/* Button to open the dialog */}
+        
         <button
-          onClick={openDialog}
-          className="p-2 h-10 w-12 dark:text-gray-500 rounded-md flex items-center justify-center hover:text-blue-700 relative"
+          onClick={toggleToggle}
+          className={`p-2 h-8 w-8 ml-2 dark:text-blue-500 rounded-md flex items-center justify-center hover:text-blue-700 relative ${
+            isToggleOpen ? "bg-blue-600" : "bg-gray-600"
+          }`}
         >
           <svg
             viewBox="0 0 24 24"
@@ -62,16 +71,27 @@ const WidgetNav = ({
           </svg>
         </button>
 
+        {/* YouTube toggle button */}
         <button
-          className="p-2 w-24 bg-red-600 hover:bg-red-900 text-white rounded ml-2"
+          onClick={toggleYoutube}
+          className="p-2  bg-red-600 hover:bg-red-900 text-white rounded ml-2"
         >
-          Leave
+          YouTube
         </button>
 
-        {/* Dialog rendering */}
-        {isDialogOpen && (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <UtilDialog onClose={closeDialog} onButtonClick={closeDialog} />
+        {/* Toggle component */}
+        {isToggleOpen && (
+          <div className="absolute top-full h-screen -left-5 bg-white border border-gray-300 shadow-lg mt-2 rounded-xl p-4 mb-10">
+            {/* Content of the toggle component goes here */}
+            <UtilDialog toggleYoutube={toggleYoutube} />
+          </div>
+        )}
+
+        {/* YouTube toggle component */}
+        {isToggleOpenYt && (
+          <div className="absolute top-full w-[18rem] mr-5  -left-8 bg-white border border-gray-300 shadow-lg mt-2 rounded-md p-1">
+            {/* Content of the YouTube toggle component goes here */}
+            <YouTube handleVideoSelect={handleVideoSelect} />
           </div>
         )}
       </div>
