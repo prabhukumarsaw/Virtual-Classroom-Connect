@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const ResponsiveDrawerButton = ({ isDrawerOpen, handleToggleDrawer }) => {
   const [text, setText] = useState('');
@@ -34,7 +34,7 @@ const ResponsiveDrawerButton = ({ isDrawerOpen, handleToggleDrawer }) => {
               {/* Quill Editor */}
               <div className="max-w-full h-screen overflow-y-auto">
                 <ReactQuill 
-                  
+                  theme='snow'
                   value={text}
                   onChange={(value) => setText(value)}
                   modules={{

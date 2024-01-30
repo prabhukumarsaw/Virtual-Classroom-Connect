@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "agora-rtc-react": "^2.1.0",
+    "agora-rtc-sdk": "^3.6.11",
     "axios": "^1.6.7",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.3",
@@ -19,8 +21,11 @@
     "react-modal": "^3.16.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.21.3",
+    "react-scripts": "^3.0.1",
     "react-youtube": "^10.1.0",
-    "sort-by": "^1.2.0"
+    "simple-peer": "^9.11.1",
+    "socket.io-client": "^4.7.4",
+    "sort-by": "^0.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

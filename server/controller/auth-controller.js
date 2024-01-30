@@ -1,6 +1,5 @@
-import { set } from "mongoose";
-import { User } from "../model/user-model.js";
-import bcrypt from "bcryptjs";
+const { User } = require("../model/user-model.js");
+const bcrypt = require("bcryptjs");
 
 const home = async (req, res) => {
   try {
@@ -34,14 +33,13 @@ const register = async (req, res) => {
     //save data user in db
     const userCreated = await User.create({ username, email, password });
 
-    //generate token and send it  on user-model
+    //generate token and send it on user-model
 
     res.status(201).json({
       msg: "Registration Successful",
-    //   userCreated,  not sent to database
+      //   userCreated,  not sent to database
       token: await userCreated.generateToken(),
       userId: userCreated._id.toString(),
-
     });
   } catch (error) {
     res.status(501).send({ msg: "Internal server error" });
@@ -73,14 +71,11 @@ const login = async (req, res) => {
     //send token
 
     if (user) {
-        res.status(201).json({
-            msg: "Login Successful",
-            token: await userExist.generateToken(),
-            userId: userExist._id.toString(),
-      
-          });
-
-
+      res.status(201).json({
+        msg: "Login Successful",
+        token: await userExist.generateToken(),
+        userId: userExist._id.toString(),
+      });
     } else {
       res.status(401).json({ message: "Invalid email or Password" });
     }
@@ -89,4 +84,4 @@ const login = async (req, res) => {
   }
 };
 
-export default { home, register, login };
+module.exports = { home, register, login };

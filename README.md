@@ -57,3 +57,34 @@ AIzaSyA1-3516ZvB44BaJgHBk8gyOMgTJUEMTNk
 Replace with your YouTube API key= AIzaSyC4p0VSyGIrFXAybEzh5jJbXGHCrSMo0js
 
 AIzaSyDLdJewZrbuhtfd9YGhCX1uQhchH2w2Tdc
+
+
+
+
+
+
+my-mediasoup-app/
+|-- client/
+|   |-- public/
+|   |-- src/
+|       |-- components/
+|           |-- CreateRoomForm.js
+|           |-- Room.js
+|           |-- RoomList.js
+|           |-- VideoControls.js
+|           |-- WebSocketConnection.js
+|       |-- App.js
+|       |-- index.js
+|       |-- styles.css
+|-- server/
+|   |-- controllers/
+|       |-- createRoomController.js
+|       |-- joinRoomController.js
+|       |-- mediasoupController.js
+|   |-- models/
+|       |-- Room.js
+|   |-- routes/
+|       |-- index.js
+|   |-- server.js
+|-- package.json
+|-- .env

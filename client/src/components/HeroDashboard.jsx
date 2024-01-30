@@ -3,7 +3,7 @@ import SoloCard from "./SoloCard";
 import CreateRoom from "../page/dashboard/CreateRoom";
 import { Link } from "react-router-dom";
 
-const Title = () => {
+const Hero = ({handleCreateRoom}) => {
   const [isModalOpen, setModalOpen] = useState(false);
   return (
     <div className="mx-auto mt-16 mb-20 text-center p-6">
@@ -25,7 +25,7 @@ const Title = () => {
             </div>
           </div>
         </Link>
-        <CreateRoom isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
+        <CreateRoom isModalOpen={isModalOpen} setModalOpen={setModalOpen} onCreateRoom={handleCreateRoom} />
         <div className="flex w-full items-center ">
           <SoloCard />
         </div>
@@ -34,4 +34,4 @@ const Title = () => {
   );
 };
 
-export default Title;
+export default Hero;

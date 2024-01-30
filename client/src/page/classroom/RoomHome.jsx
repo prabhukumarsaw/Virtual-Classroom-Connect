@@ -13,6 +13,8 @@ import YouTubePlayer from "react-youtube";
 import YouTube from "../../components/YouTubeDialog";
 import { FaBackward, FaStop } from "react-icons/fa";
 
+import UserVideo from "./UserVideo";
+
 const defaultWallpapers = [
   wallpaper_1,
   wallpaper_2,
@@ -59,7 +61,7 @@ const RoomHome = () => {
     setSelectedVideo(null);
   };
 
-  const handleGoBack = () => {
+  const handleGoBack = ( ) => {
     // Implement go back functionality
   };
 
@@ -73,6 +75,7 @@ const RoomHome = () => {
         backgroundAttachment: "fixed",
       }}
     >
+      <UserVideo/>
       <div className="flex-grow mx-8 dark:bg-gray-900 overflow-y-auto sm:w-3/4 ">
       <div>
   {/* Add youtube Dialog */}

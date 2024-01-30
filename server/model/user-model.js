@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken';
+const mongoose = require("mongoose");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -45,68 +45,39 @@ const userSchema = new mongoose.Schema({
   about: String,
 });
 
+userSchema.pre('save', async function(next) {
+  const user = this;
 
+  if (!user.isModified("password")) {
+    return next();
+  }
 
-//pre method:  save karne se pahle target krna hain
-
-//----------------------- secure password using bcryptjs--------------------------//
-
-
-
-userSchema.pre('save', async function(next){
-    const user = this; // get data
-
-    if(!user.isModified("password")) {
-        next();
-    }
-    try {
-        const saltRound = await bcrypt.genSalt(10);
-        const hash_password = await bcrypt.hash(user.password, saltRound);
-        user.password = hash_password;
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const saltRound = await bcrypt.genSalt(10);
+    const hash_password = await bcrypt.hash(user.password, saltRound);
+    user.password = hash_password;
+    return next();
+  } catch (error) {
+    return next(error);
+  }
 });
 
-
-//jwt
-
-userSchema.methods.generateToken = function () {
-    try {
-        return jwt.sign({
-            userId: this._id.toString(),
-            email: this.email,
-            role: this.role,
-        },
-        'HELLOEYERTONE',  //seceret key
-        {
-            expiresIn: "30d",
-        }
-        );
-    } catch (error) {
-        console.log(error);
-    }
+userSchema.methods.generateToken = function() {
+  try {
+    return jwt.sign({
+        userId: this._id.toString(),
+        email: this.email,
+        role: this.role,
+      },
+      'HELLOEYERTONE', //seceret key
+      {
+        expiresIn: "30d",
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const User = mongoose.model("User", userSchema);
-export { User };
-
-
-
-
+module.exports = { User };

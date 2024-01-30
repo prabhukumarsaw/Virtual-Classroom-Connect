@@ -1,24 +1,32 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Card from '../../components/Card.jsx'
 import { userData } from "../../assets/data.jsx";
 import AllUsers from './AllUsers.jsx'
-import Title from '../../components/Title.jsx';
 
 const Home = () => {
+  const [roomsData, setRoomsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch data from the server when the component mounts
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5555/rooms/all");
+        setRoomsData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+        setError("Error fetching rooms. Please try again."); // Set error state
+      setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures this runs once when the component mounts
 
 
-    const cards = [
-        { id: 1, title: 'Card 1', imageUrl: 'https://cdn.pixabay.com/photo/2023/09/09/09/03/cheetah-8242729_1280.png' },
-        { id: 2, title: 'Card 2', imageUrl: 'https://robohash.org/CBP.png?set=set2' },
-        { id: 3, title: 'Card 3', imageUrl: 'https://robohash.org/CBP.png?set=set3' },
-        { id: 4, title: 'Card 4', imageUrl: 'https://robohash.org/CBP.png?set=set4' },
-        { id: 5, title: 'Card 5', imageUrl: 'https://robohash.org/CBP.png?set=set5' },
-        { id: 6, title: 'Card 6', imageUrl: 'https://robohash.org/CBP.png?set=set6' },
-        { id: 7, title: 'Card 7', imageUrl: 'https://robohash.org/CBP.png?set=set7' },
-        { id: 8, title: 'Card 8', imageUrl: 'https://robohash.org/CBP.png?set=set87' },
-        { id: 9, title: 'Card 9', imageUrl: 'https://robohash.org/CBP.png?set=set9' },
-        { id: 10, title: 'Card 10', imageUrl: 'https://robohash.org/CBP.png?set=set10' },
-      ];
 
 
   return (
@@ -29,11 +37,19 @@ const Home = () => {
     <div className="flex-grow flex overflow-x-hidden">
     
     <div className="flex-grow dark:bg-gray-900 overflow-y-auto bg-cover bg-center" >
+    
+    {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3  gap-4 m-4">
-        {cards.map((card) => (
-          <Card key={card.id} title={card.title} imageUrl={card.imageUrl} />
+    { roomsData.map((room) => (
+          <Card key={room._id} room={room}  />
         ))}
       </div>
+      )}
       </div>
       <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full overflow-y-auto lg:block hidden p-5">
       

@@ -6,6 +6,7 @@ import AuthFragment from '../page/Authentication/SignIn'
 import SignUp from "../page/Authentication/SignUp";
 import Room from "../layout/Room";
 import RoomHome from "../page/classroom/RoomHome";
+import DemoRTC from "../page/dashboard/DemoRTC";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "globalfragment",
         element: <GlobalRoom />,
+      },
+      {
+        path: "demortc",
+        element: <DemoRTC />,
       },
       
     ],
