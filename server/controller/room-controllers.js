@@ -12,7 +12,7 @@ const home = async (req, res) => {
 };
 
 // Route to create a new room
-const create =  async (req, res) => {
+const createRoom =  async (req, res) => {
   try {
     const { name, description, maxParticipants } = req.body;
     
@@ -32,6 +32,8 @@ const create =  async (req, res) => {
   }
 };
 
+
+
 // Route to get all rooms
 const all =  async (req, res) => {
   try {
@@ -45,7 +47,7 @@ const all =  async (req, res) => {
 };
 
 // Route to get room details by ID
-const room =  async (req, res) => {
+const joinRoom =  async (req, res) => {
   try {
     const roomId = req.params.roomId;
 
@@ -63,4 +65,4 @@ const room =  async (req, res) => {
 };
 
 // Export the router
-module.exports = {home, create, all, room};
+module.exports = {home, createRoom, joinRoom, all};

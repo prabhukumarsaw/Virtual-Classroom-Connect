@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Card = ({ room }) => {
   const { _id, name, description, participants, maxParticipants, active, } = room;
@@ -51,9 +52,9 @@ const Card = ({ room }) => {
             <div className="leading-snug text-xs text-gray-600 pr-1">{description}</div>
           </div>
         </div>
-        <button className="h-8 px-3 text-md font-bold text-blue-400 border border-blue-400 rounded-md hover:bg-blue-100">
+        <Link to={`/room/${room._id}`} className="h-8 px-3 text-md font-bold text-blue-400 border border-blue-400 rounded-md hover:bg-blue-100">
           Join
-        </button>
+        </Link>
       </div>
     </div>
   );

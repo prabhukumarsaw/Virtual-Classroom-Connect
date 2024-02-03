@@ -4,7 +4,6 @@ import AllUsers from '../dashboard/AllUsers';
 import HeroDashboard from '../../components/HeroDashboard.jsx';
 import RecentRoom from '../../components/RecentRoom.jsx';
 import TabNavigation from '../../components/TabNavigation.jsx';
-import VideoConference from '../../components/VideoConference.jsx';
 
 const Home = () => {
   const [rooms, setRooms] = useState([]);
@@ -55,7 +54,7 @@ const Home = () => {
               ))}
             </div>
           ) : (
-            <VideoConference roomId={selectedRoom} onLeaveRoom={handleLeaveRoom} />
+            " "
           )}
         </div>
         <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full overflow-y-auto lg:block hidden p-5">

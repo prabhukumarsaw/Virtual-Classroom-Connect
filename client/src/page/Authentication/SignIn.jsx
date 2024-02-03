@@ -1,40 +1,38 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Index = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const { password, email } = formData;
+  
+
+  const { signUpWithGmail } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    let name = e.target.name;
-    let value = e.target.value;
-
-    setFormData({...formData, [name]:value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    console.log('Form submitted:', formData);
-  //connect backend frontend to axios
-  try {
-    const response = await axios.post("http://localhost:5555/api/auth/login",
-    formData
-    );
-    console.log(response.data);
-    alert("Login Successful");
-    navigate("/main");
-  } catch (error) {
-    alert("Invalid Credential");
-    console.error("Error Login user:", error);
+  // google login
+  const handleGoogleAuth = async () =>{
+    try {
+      const result = await signUpWithGmail();
+      const user = result.user;
+  
+      // Send user data to the backend
+      await axios.post('http://localhost:5555/api/auth/users', {
+        email: user.email,
+        name: user.displayName,
+        imageUrl: user.photoURL,
+      });
+  
+      navigate('/main');
+      alert('Login Successful');
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+    }
   }
-};
+
+ 
+  
+
+ 
+
 
   return (
     <div>
@@ -62,7 +60,9 @@ const Index = () => {
               </h1>
               <div className="w-full flex-1 mt-8">
                 <div className="flex flex-col items-center">
-                  <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+                  <button
+                  onClick={handleGoogleAuth}
+                   className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                     <div className="bg-white p-2 rounded-full">
                       <svg className="w-4" viewBox="0 0 533.5 544.3">
                         <path
@@ -101,55 +101,12 @@ const Index = () => {
 
                 <div className="my-12 border-b text-center">
                   <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                    Or sign In with e-mail
+                    Save Water Save Tree
                   </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="mx-auto max-w-xs">
-                  <input
-                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="Email"
-                  />
-                  <input
-                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={password}
-                    onChange={handleChange}
-                    placeholder="Password"
-                  />
-                  <button type="submit" className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                    <svg
-                      className="w-6 h-6 -ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                      <circle cx="8.5" cy="7" r="4" />
-                      <path d="M20 8v6M23 11h-6" />
-                    </svg>
-                    <span className="ml-3">Sign In</span>
-                  </button>
-                  
-                </form>
-                <p className="mt-2 text-sm text-gray-600 tracking-wide font-medium text-center">
-                    Not a member yet?{" "}
-                    <Link
-                      to='/signup'
-                      className="border-b border-gray-500 border-dotted"
-                    >
-                      Sign Up
-                    </Link>
-                  </p>
+               
+              
                   <p className="mt-6 text-xs text-gray-600 text-center">
                     I agree to abide by templatana
                     <a

@@ -3,23 +3,23 @@ import Main from "../layout/Main";
 import Home from "../page/dashboard/Home";
 import GlobalRoom from "../page/dashboard/GlobalRoom";
 import AuthFragment from '../page/Authentication/SignIn'
-import SignUp from "../page/Authentication/SignUp";
 import Room from "../layout/Room";
 import RoomHome from "../page/classroom/RoomHome";
-import DemoRTC from "../page/dashboard/DemoRTC";
-
+import StatProfile from "../page/dashboard/StatProfile";
+import PrivateRouter from '../PrivateRouter/PrivateRouter'
+import EditProfile from "../page/dashboard/EditProfile";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <AuthFragment />,
   },
   {
-    path: "signup",
-    element: <SignUp />,
+    path: "/editProfile",
+    element: <EditProfile />,
   },
   {
     path: "main",
-    element: <Main />,
+    element: <PrivateRouter><Main /></PrivateRouter>,
     children: [
       {
         path: "",
@@ -30,27 +30,17 @@ const router = createBrowserRouter([
         element: <GlobalRoom />,
       },
       {
-        path: "demortc",
-        element: <DemoRTC />,
+        path: "statprofile",
+        element: <StatProfile />,
       },
+      
       
     ],
   },
 
   {
-    path: "room",
-    element: <Room />,
-    children: [
-      {
-        path: "",
-        element: <RoomHome />,
-      },
-      {
-        path: "globalfragment",
-        element: <GlobalRoom />,
-      },
-      
-    ],
+    path: "room/:roomId",
+    element: <PrivateRouter><Room /></PrivateRouter>,
   },
 
 ]);

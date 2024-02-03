@@ -18,6 +18,7 @@ const roomStyles = {
   },
 };
 
+
 // eslint-disable-next-line react/prop-types
 const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
   const [roomData, setRoomData] = useState({
@@ -37,8 +38,7 @@ const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
     setRoomData({ ...roomData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const createRoom = async () => {
 
     console.log("all Data", roomData);
     try {
@@ -46,11 +46,12 @@ const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
         "http://localhost:5555/rooms/create",
         roomData
       );
+
       // Handle the response as needed (e.g., show a success message)
       console.log("Room created successfully:", response.data);
       alert("Room created successfully");
-      navigate("/room");
-
+        
+      navigate(`/room/${response.data._id}`);
       // Close the modal
       setModalOpen(false);
     } catch (error) {
@@ -80,7 +81,6 @@ const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
           <div className="text-center p-4">
             <p className="text-gray-500 text-sm">Hello Prabhu</p>
           </div>
-          <form onSubmit={handleSubmit}>
             <div className="text-left mx-3 my-2">
               <h3 className="text-xs font-bold p-2">Room name *</h3>
               <input
@@ -129,13 +129,12 @@ const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
 
             <div className="py-4 text-center border-t ">
               <button
-                type="submit"
+                onClick={createRoom}
                 className=" rounded-md bg-gray-900 hover:shadow-lg font-semibold text-white py-1 px-24 mx-4 "
               >
                 Create Room
               </button>
             </div>
-          </form>
         </div>
       </>
     </Modal>
