@@ -12,17 +12,14 @@ const AuthProvider = ({children}) => {
     const [user, setUser] = useState("");
     const [loading, setLoading] = useState(true);
 
-    //create an account
-  const createUser = (email, password)  => {
-    return createUserWithEmailAndPassword(auth, email, password)
-
-  }
+ 
 
     //sign with gmail
 
      //sign with google account
   const signUpWithGmail = () => {
     return signInWithPopup(auth, googleProvider)
+    
   }
 
 
@@ -30,7 +27,7 @@ const AuthProvider = ({children}) => {
   const updateUserProfile = (name, photoURL) => {
     return updateProfile(auth.currentUser, {
       displayName: name, 
-      photoURL: photoURL
+      photoURL: photoURL,
     })
   }
 
@@ -71,7 +68,6 @@ useEffect( () =>{
 
     const authInfo = {
         user,
-        createUser,
         signUpWithGmail,
         updateUserProfile,
         logOut

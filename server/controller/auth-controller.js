@@ -10,7 +10,7 @@ const home = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { email, name, imageUrl } = req.body;
+    const { email, uid,  name, imageUrl, address } = req.body;
 
     // Check if the user already exists in the database
     let user = await User.findOne({ email });
@@ -19,14 +19,17 @@ const createUser = async (req, res) => {
       // If the user does not exist, create a new user in the database
       user = await User.create({
         email,
+        uid,
         name,
         imageUrl,
+        address,
         // Add any additional fields you want to save
       });
     } else {
       // If the user exists, update their data (e.g., update name, imageUrl, etc.)
       user.name = name;
       user.imageUrl = imageUrl;
+      user.address = address;
       // Update any other fields as needed
       await user.save();
     }
@@ -58,38 +61,46 @@ const viewAllUsers = async (req, res) => {
 // View a user by ID
 const getOneUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
+    const { uid } = req.params;
+    const user = await User.findOne({ uid });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    return res.status(200).json( user );
+    return res.status(200).json(user);
   } catch (error) {
-    console.error('Error viewing user by ID:', error);
+    console.error('Error viewing user by UID:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
+
+// Update user details
 // Update user details
 const updateUser = async (req, res) => {
   try {
-    const {id} = req.params;
-    const updateData = req.body;
+    const { uid } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
+    // Check if the user already exists in MongoDB
+    let user = await User.findOne({ uid });
 
-    if (!updatedUser) {
+    if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.status(200).json({ user: updatedUser });
+    // If the user exists, update the user details
+    Object.assign(user, req.body);
+    await user.save();
+
+    res.status(200).json({ message: 'User details updated successfully' });
   } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
 
 // Delete a user
 const deleteUser = async (req, res) => {

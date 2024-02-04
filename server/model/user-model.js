@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  imageUrl:  String ,
+  imageUrl: {
+    type: String,
+  },
 
   name: {
     type: String,
@@ -17,9 +19,10 @@ const userSchema = new mongoose.Schema({
   },
   address: { type: String },
 
-  interests: [{ type: String }],
-  gender: { type: String, enum: ["Male", "Female", "Other"] },
-  educationLevel: { type: String },
+
+  gender: { type: String, enum: ['boy', 'girl', 'non-binary'], },
+  educationLevel: { type: String, enum: ['High School', 'Middle School', 'Postgraduate', 'Professional'], },
+
   interests: {
     type: [String],
     default: [],
@@ -27,7 +30,7 @@ const userSchema = new mongoose.Schema({
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   onlineStatus: { type: Boolean, default: false },
 
-  about: { type: String },
+  description: { type: String },
 });
 
 const User = mongoose.model("User", userSchema);

@@ -135,12 +135,7 @@ const Main = () => {
           </div>
         </div>
         <div
-          className="flex-grow overflow-hidden h-full flex flex-col"
-          style={{
-            background:
-              "url(https://cswcdn.azureedge.net/featureimages/ee9a962f-6288-405f-96b8-ca3eff485bbe.png) no-repeat",
-            backgroundSize: "cover",
-          }}
+          className="flex-grow overflow-hidden h-full flex flex-col  bg-gray-900 dark:bg-gray-900"
         >
           <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden  px-10">
             <div className="ml-auto flex items-center h-10 space-x-7">

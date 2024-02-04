@@ -4,35 +4,34 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthProvider";
 
 const Index = () => {
-  
-
   const { signUpWithGmail } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  
   // google login
-  const handleGoogleAuth = async () =>{
+  const handleGoogleAuth = async () => {
     try {
       const result = await signUpWithGmail();
       const user = result.user;
-  
+
+      // Additional user details
+      
+
       // Send user data to the backend
-      await axios.post('http://localhost:5555/api/auth/users', {
+      await axios.post("http://localhost:5555/api/auth/users", {
         email: user.email,
         name: user.displayName,
         imageUrl: user.photoURL,
+        uid: user.uid,
+      
       });
-  
-      navigate('/main');
-      alert('Login Successful');
+
+      navigate("/main");
+      alert("Login Successful");
     } catch (error) {
-      console.error('Error signing in with Google:', error);
+      console.error("Error signing in with Google:", error);
     }
-  }
-
- 
-  
-
- 
-
+  };
 
   return (
     <div>
@@ -56,13 +55,14 @@ const Index = () => {
             </div> */}
             <div className="mt-12 flex flex-col items-center ">
               <h1 className="text-2xl xl:text-3xl font-extrabold">
-              Welcome to Apna Classroom!
+                Welcome to Apna Classroom!
               </h1>
               <div className="w-full flex-1 mt-8">
                 <div className="flex flex-col items-center">
                   <button
-                  onClick={handleGoogleAuth}
-                   className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+                    onClick={handleGoogleAuth}
+                    className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline"
+                  >
                     <div className="bg-white p-2 rounded-full">
                       <svg className="w-4" viewBox="0 0 533.5 544.3">
                         <path
@@ -105,24 +105,22 @@ const Index = () => {
                   </div>
                 </div>
 
-               
-              
-                  <p className="mt-6 text-xs text-gray-600 text-center">
-                    I agree to abide by templatana
-                    <a
-                      href="#"
-                      className="border-b border-gray-500 border-dotted"
-                    >
-                      Terms of Service
-                    </a>
-                    and its
-                    <a
-                      href="#"
-                      className="border-b border-gray-500 border-dotted"
-                    >
-                      Privacy Policy
-                    </a>
-                  </p>
+                <p className="mt-6 text-xs text-gray-600 text-center">
+                  I agree to abide by templatana
+                  <a
+                    href="#"
+                    className="border-b border-gray-500 border-dotted"
+                  >
+                    Terms of Service
+                  </a>
+                  and its
+                  <a
+                    href="#"
+                    className="border-b border-gray-500 border-dotted"
+                  >
+                    Privacy Policy
+                  </a>
+                </p>
               </div>
             </div>
           </div>
