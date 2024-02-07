@@ -1,6 +1,7 @@
 
 const express = require('express');
 const Room = require('../model/room-model'); // Adjust the path based on your project structure
+const authenticateUser = require('../Middleware/authMiddleware');
 
 //  router
 const home = async (req, res) => {
@@ -11,40 +12,79 @@ const home = async (req, res) => {
   }
 };
 
+const rooms = [];
+
 // Route to create a new room
 const createRoom =  async (req, res) => {
+  const { roomName, roomDescription, selectedImage, maxParticipants } = req.body;
+
   try {
-    const { name, description, maxParticipants } = req.body;
+    console.log("Received request to create room:", req.body);
+
+     // Ensure the selectedImage is one of the predefined options
+   
     
-    // Create a new room
-    const room = new Room({
-      name,
-      description,
-      maxParticipants,
+
+    const newRoom = await Room.create({
+      roomName,
+      roomDescription,
+      selectedImage,
+      maxParticipants,// Assuming you have a middleware to attach the user to the request
+      participants: [],
     });
 
-    // Save the room to the database
-    const savedRoom = await room.save();
+    // Schedule room cleanup after 5 minutes if it's empty
+    try {
+      setTimeout(async () => {
+        const roomToDelete = await Room.findByIdAndDelete(newRoom._id);
+    
+        if (roomToDelete) {
+          console.log(`Room '${roomToDelete.roomName}' deleted due to inactivity.`);
+        }
+      }, 5 * 60 * 1000); // 5 minutes in milliseconds
+    } catch (error) {
+      console.error('Error creating room:', error);
+    }
 
-    res.status(201).json(savedRoom);
+    res.status(200).json({ message: 'Room created successfully', room: newRoom });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    if (error.name === 'ValidationError') {
+      console.error("Validation Error:", error.errors);
+      res.status(400).json({ error: 'Validation Error', details: error.errors });
+    } else {
+      console.error("Error creating room:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 };
 
 
 
 // Route to get all rooms
-const all =  async (req, res) => {
+const all = async (req, res) => {
   try {
-    // Retrieve all rooms from the database
-    const rooms = await Room.find();
+    const rooms = await Room.find().populate('creator', 'name');
 
-    res.status(200).json(rooms);
+    // Implement logic to delete empty rooms after 5 minutes
+    for (const room of rooms) {
+      if (room.participants.length === 0 && room.createdAt) {
+        const elapsedTime = Date.now() - room.createdAt.getTime();
+        if (elapsedTime > 5 * 60 * 1000) { // 5 minutes in milliseconds
+          const deletedRoom = await Room.findByIdAndDelete(room._id);
+          if (deletedRoom) {
+            console.log(`Room '${deletedRoom.roomName}' deleted due to inactivity.`);
+          }
+        }
+      }
+    }
+
+    res.status(200).json({ rooms });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Route to get room details by ID
 const joinRoom =  async (req, res) => {

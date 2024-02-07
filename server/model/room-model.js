@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
-  name: {
+  roomName: {
     type: String,
     required: true,
   },
-  description: {
+  roomDescription: {
+    type: String,
+    required: true,
+  },
+  selectedImage: {
     type: String,
     required: true,
   },
@@ -13,19 +17,15 @@ const roomSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  active: {
-    type: Boolean,
-    default: true, // Set the default value to true if the room is considered active by default
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Reference to the User model
+    
   },
   participants: [
     {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Assuming you have a User model, adjust this based on your user model
-      },
-      fullname: String,  // Add user name field
-      imageUrl: String,
-      username: String, // Add user image field (you can store the URL or any reference to the image)
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', // Reference to the User model
     },
   ],
 });

@@ -1,6 +1,8 @@
 const express = require("express");
 const roomControllers = require('../controller/room-controllers.js');
 const Router = express.Router();
+const authenticateUser = require('../Middleware/authMiddleware');
+
 
 Router.route('/').get(roomControllers.home);
 Router.route('/create').post(roomControllers.createRoom);

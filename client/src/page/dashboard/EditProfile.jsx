@@ -5,7 +5,8 @@ import axios from "axios";
 
 const EditProfile = () => {
   const [previewImage, setPreviewImage] = useState("");
-  const { user } = useContext(AuthContext);
+  const { user, updateUserProfile } = useContext(AuthContext);
+  
   const [userData, setUserData] = useState({
     name: "",
     description: "",
@@ -63,6 +64,7 @@ const EditProfile = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+   
 
     try {
       // Add logic to send the updated user data to the server
@@ -70,6 +72,8 @@ const EditProfile = () => {
         `http://localhost:5555/api/auth/users/${user.uid}`,
         userData
       ); // Replace with your actual update API endpoint
+      // Update user profile on Firebase
+    await updateUserProfile(name);
       console.log("User data updated successfully!");
       navigate('/main/StatProfile')
       alert("User data updated successfully!");

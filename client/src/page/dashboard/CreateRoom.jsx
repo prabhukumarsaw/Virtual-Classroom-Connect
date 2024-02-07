@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import wallpaper_1 from "../../assets/card_color/1.jpg";
+import wallpaper_2 from "../../assets/card_color/2.jpg";
+import wallpaper_3 from "../../assets/card_color/3.jpg";
+import wallpaper_4 from "../../assets/card_color/4.jpg";
+
+
+
 // Make sure to set appElement to satisfy accessibility requirements
 Modal.setAppElement("#root");
 
@@ -18,18 +26,29 @@ const roomStyles = {
   },
 };
 
+const predefinedImages = [
+  { label: "Image 1", value: wallpaper_1 },
+  { label: "Image 2", value: wallpaper_2 },
+  { label: "Image 3", value: wallpaper_3 },
+  { label: "Image 4", value: wallpaper_4 },
+  // Add more images as needed
+];
+
 
 // eslint-disable-next-line react/prop-types
 const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
   const [roomData, setRoomData] = useState({
-    name: "",
-    description: "",
+    roomName: "",
+    roomDescription: "",
+    color: "blue",
     maxParticipants: 15,
+    selectedImage: predefinedImages[0].value,
+    
   });
 
   const navigate = useNavigate();
 
-  const { name, description, maxParticipants } = roomData;
+  const { roomName, roomDescription, maxParticipants, selectedImage } = roomData;
 
   const handleChange = (e) => {
     let name = e.target.name;
@@ -50,8 +69,9 @@ const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
       // Handle the response as needed (e.g., show a success message)
       console.log("Room created successfully:", response.data);
       alert("Room created successfully");
-        
-      navigate(`/room/${response.data._id}`);
+        console.log(response.data.room._id);
+        const roomId = response.data.room._id;
+      navigate(`/room/${roomId}`);
       // Close the modal
       setModalOpen(false);
     } catch (error) {
@@ -85,15 +105,35 @@ const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
               <h3 className="text-xs font-bold p-2">Room name *</h3>
               <input
                 type="text"
-                name="name" // Change to 'name'
+                name="roomName" // Change to 'name'
                 id="roomName"
-                value={name}
+                value={roomName}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500"
                 placeholder="alpha study room ✨"
                 required
               />
             </div>
+            {/* ... other form fields ... */}
+            <div className="text-left mx-3 my-2">
+            <h3 className="text-xs font-bold p-2">Image *</h3>
+            <select
+              name="selectedImage"
+              id="selectedImage"
+              value={selectedImage}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500"
+            >
+              {predefinedImages.map((image, index) => (
+                <option key={index} value={image.value}>
+                  {image.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+            
 
             <div className="text-left mx-3 my-2">
               <h3 className="text-xs font-bold p-2">
@@ -117,9 +157,9 @@ const CreateRoom = ({ isModalOpen, setModalOpen, onSubmit }) => {
               </h3>
               <input
                 type="text"
-                name="description" // Change to 'description'
+                name="roomDescription" // Change to 'description'
                 id="roomDescription"
-                value={description}
+                value={roomDescription}
                 required
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500"

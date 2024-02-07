@@ -61,7 +61,7 @@ const viewAllUsers = async (req, res) => {
 // View a user by ID
 const getOneUser = async (req, res) => {
   try {
-    const { uid } = req.params;
+    const {uid } = req.params;
     const user = await User.findOne({ uid });
 
     if (!user) {

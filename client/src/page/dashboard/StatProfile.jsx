@@ -4,32 +4,25 @@ import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 
 const StatProfile = () => {
-  const { user } = useContext(AuthContext);
-  const [userData, setUserData] = useState("");
+  const { user,loading, error } = useContext(AuthContext);
 
-  console.log("user uid", user.uid);
-  useEffect(() => {
-    // Fetch user data from your backend API
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5555/api/auth/users/${user.uid}`
-        ); // Adjust the endpoint
-        setUserData(response.data);
-        console.log("res", response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        // Handle errors as needed
-      }
-    };
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-    if (user) {
-      fetchUserData();
-    }
-  }, []); // Trigger the effect when the user object changes
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
+  if (!user) {
+    // User is not signed in
+    return <p>Please sign in to view your profile.</p>;
+  }
+  
+  const {additionalData} = user;
+  console.log("oooo",additionalData);
   return (
-    <>
+    <> {additionalData && (
       <div className="overflow-y-auto ">
         <div className="flex-grow dark:bg-gray-900 bg-cover bg-center  items-center justify-center  bg-gray-900">
           <div className="grid grid-cols-1 md:grid-cols-3 ">
@@ -40,7 +33,7 @@ const StatProfile = () => {
                   <div className="flex sm:flex">
                     <div className=" relative h-32 w-32  sm:mb-0 mb-3">
                       <img
-                        src={userData.imageUrl}
+                        src={additionalData.imageUrl}
                         alt="aji"
                         className=" w-32 h-32 object-cover rounded-2xl"
                       />
@@ -63,14 +56,14 @@ const StatProfile = () => {
                         <div className="flex items-center">
                           <div className="flex flex-col px-2">
                             <div className="w-full flex-none text-lg text-gray-200 font-bold leading-none">
-                              {userData.name}, {userData.age}
+                              {additionalData.name}, {additionalData.age}
                             </div>
                             <div className="flex-auto text-gray-400 my-2">
                               <span className="mr-3 ">
-                                🧑‍🎓{userData.educationLevel}
+                                🧑‍🎓{additionalData.educationLevel}
                               </span>
                               <span className="mr-3 border-r border-gray-600  max-h-0"></span>
-                              <span>{userData.address}</span>
+                              <span>{additionalData.address}</span>
                             </div>
                           </div>
                         </div>
@@ -78,12 +71,12 @@ const StatProfile = () => {
 
                       <div className="flex pt-2  text-sm text-gray-400">
                         <div className="flex-1 inline-flex items-center">
-                          <p className="px-2">✌️ {userData.gender}</p>
+                          <p className="px-2">✌️ {additionalData.gender}</p>
                         </div>
                       </div>
                       <div className="flex pt-2  text-sm text-gray-400">
                         <div className="flex-1 inline-flex items-center">
-                          <p className="px-2">✌️ {userData.email}</p>
+                          <p className="px-2">✌️ {additionalData.email}</p>
                         </div>
                       </div>
                     </div>
@@ -102,8 +95,8 @@ const StatProfile = () => {
                       <div className="grid grid-cols-3 gap-3">
                         {" "}
                         {/* Adjust the number of columns based on your preference */}
-                        {userData.interests && userData.interests.length > 0 ? (
-                          userData.interests.map((interest, index) => (
+                        {additionalData.interests && additionalData.interests.length > 0 ? (
+                          additionalData.interests.map((interest, index) => (
                             <span
                               key={index}
                               className="select-none rounded-lg border border-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-pink-500 transition-all hover:opacity-75 focus:ring focus:ring-pink-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -132,7 +125,7 @@ const StatProfile = () => {
                       ABOUT ME
                     </div>
                     <div className=" text-gray-400 flex items-center ">
-                      <p>{userData.description} </p>
+                      <p>{additionalData.description} </p>
                     </div>
                   </div>
 
@@ -490,6 +483,7 @@ const StatProfile = () => {
           <div className="container  m-4"></div>
         </div>
       </div>
+      )}
     </>
   );
 };

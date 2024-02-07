@@ -13,19 +13,21 @@ const Index = () => {
     try {
       const result = await signUpWithGmail();
       const user = result.user;
-
+  
+      console.log("User details:", user);
+  
       // Additional user details
-      
-
-      // Send user data to the backend
-      await axios.post("http://localhost:5555/api/auth/users", {
+      const userInfo = {
         email: user.email,
         name: user.displayName,
         imageUrl: user.photoURL,
         uid: user.uid,
-      
-      });
-
+      };
+  
+      // Send user data to the backend
+      const response = await axios.post("http://localhost:5555/api/auth/users", userInfo);
+  
+      console.log("Login form", response);
       navigate("/main");
       alert("Login Successful");
     } catch (error) {

@@ -4,7 +4,6 @@ const authRouter = express.Router();
 
 
 
-
 authRouter.route('/users').post(authControllers.createUser);
 authRouter.route('/users').get(authControllers.viewAllUsers);  // View all users
 authRouter.route('/users/:uid').get(authControllers.getOneUser);  // View a user by ID

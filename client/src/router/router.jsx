@@ -8,6 +8,10 @@ import RoomHome from "../page/classroom/RoomHome";
 import StatProfile from "../page/dashboard/StatProfile";
 import PrivateRouter from '../PrivateRouter/PrivateRouter'
 import EditProfile from "../page/dashboard/EditProfile";
+import TestPage from "../page/dashboard/TestPage";
+import VirtualRoom from '../page/virtualroom/VirtualRoom'
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,11 +37,18 @@ const router = createBrowserRouter([
         path: "statprofile",
         element: <StatProfile />,
       },
+      {
+        path: "testpage",
+        element: <TestPage />,
+      },
       
       
     ],
   },
-
+  {
+    path: "virualroom/:roomId",
+    element: <VirtualRoom />
+  },
   {
     path: "room/:roomId",
     element: <PrivateRouter><Room /></PrivateRouter>,
