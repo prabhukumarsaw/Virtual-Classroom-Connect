@@ -47,7 +47,7 @@ const router = createBrowserRouter([
   },
   {
     path: "virualroom/:roomId",
-    element: <VirtualRoom />
+    element: <Room />
   },
   {
     path: "room/:roomId",

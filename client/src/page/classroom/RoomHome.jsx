@@ -76,7 +76,7 @@ const RoomHome = () => {
       }}
     >
       
-      <div className="flex-grow mx-8 dark:bg-gray-900 overflow-y-auto sm:w-3/4 ">
+      <div className="flex-grow mx-8  overflow-y-auto sm:w-3/4 ">
       <div>
   {/* Add youtube Dialog */}
   {selectedVideo && (
