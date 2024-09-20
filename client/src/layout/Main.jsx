@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import AllUsers from "../page/dashboard/AllUsers";
-import CreateRoom from "../page/dashboard/CreateRoom";
-import { AuthContext } from "../context/AuthProvider";
+import CreateRoom from "../page/dashboard/RoomComponent/CreateRoom";
+import { AuthContext } from "../context/AuthContext";
 import Spinner from "../components/Spinner";
 
 const Main = () => {

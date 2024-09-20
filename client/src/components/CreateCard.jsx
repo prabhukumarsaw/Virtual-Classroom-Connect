@@ -1,6 +1,6 @@
 // Card.js
 import React from "react";
-import CreateRoom from "../page/dashboard/CreateRoom";
+import CreateRoom from "../page/dashboard/RoomComponent/CreateRoom";
 
 // eslint-disable-next-line react/prop-types
 const CreateCard = ({ imageUrl, title }) => {

@@ -1,84 +1,77 @@
 const express = require('express');
-const http = require('http');
-const app = express();
-const server = http.createServer(app);
-const socket = require('socket.io');
-const io = socket(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
-
-const mongoose = require('mongoose');
-const dotenv = require("dotenv");
-const { PORT, MONGODB_URI } = require('./config.js');
-const authRouter = require('./router/auth-router.js');
-const roomController = require('./router/room-router.js');
+const passport = require('passport');
+const dotenv = require('dotenv');
 const cors = require('cors');
-var jwt = require('jsonwebtoken');
-const groupVideoCallSocket = require("./socket/groupVideoCall");
+const connectDB = require('./config/database');
+const authRoutes = require('./routes/V1/authRoutes');
+const userRoutes = require('./routes/V1/userRoutes');
+const roomRoutes = require('./routes/V1/roomRoutes');
+const errorHandler = require('./utils/errorHandler');
+const colors = require('colors'); // For colorful console messages
 
+// Load environment variables
+dotenv.config();
 
-// config for dotenv
-dotenv.config()
+// Initialize Express app
+const app = express();
 
-
-
+const allowedOrigins = ['http://localhost:5173', ''];
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
-  methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
-  credential: true,
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true, // If you need to handle cookies or authentication
 };
 
 app.use(cors(corsOptions));
 
+// Body parser middleware
 app.use(express.json());
 
-//routes
-app.get("/", (req, res) => res.send("Welcome to Apna Virtual Classroom :)"));
-app.use("/api/auth", authRouter);
-app.use('/rooms', roomController);
+// Connect to the database
+connectDB();
 
+// Passport middleware
+app.use(passport.initialize());
+require('./config/passport')(passport);
 
-//JWT Authentication
+// User routes
+app.use('/api/V1', authRoutes);
+app.use('/api/V1', userRoutes);
+app.use('/api/V1', roomRoutes);
 
-app.post('/jwt', async (request, response) => {
-  try {
-    const user = request.body;
-    const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '10hr'
-    });
-    response.send({ token });
-    console.log("TOKKEN", token);
-  } catch (error) {
-    console.error("Error creating JWT token:", error.message);
-    response.status(500).send({ error: 'Internal Server Error' });
-  }
+// Global error handler
+app.use(errorHandler);
+
+// Route to check if the server is running
+app.get('/', (req, res) => {
+  const message = `
+    🚀 Server is up and running!<br>
+    🌐 Port: ${PORT}<br>
+    🔧 Environment: ${ENVIRONMENT}<br>
+    📅 Started on: ${new Date().toLocaleString()}
+  `;
+  res.status(200).send(`<pre style="font-family:monospace">${message}</pre>`);
 });
 
+// Start the server
+const PORT = process.env.PORT || 5000;
+const ENVIRONMENT = process.env.NODE_ENV || 'development';
 
-
-
-
-// Socket.io logic
-groupVideoCallSocket(io);
-
-// Port setup
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  // useCreateIndex: true,
-})
-  .then(() => {
-    server.listen(PORT, () => {
-      console.log('App Connected to Database');
-      console.log('====================================');
-      console.log(`Server Started Port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
+app.listen(PORT, () => {
+  console.log('='.repeat(50).green);
+  console.log(`
+  🚀 Server is up and running!
+  🌐 Port: ${PORT}
+  🔧 Environment: ${ENVIRONMENT}
+  📅 Started on: ${new Date().toLocaleString()}
+  `.bold.green);
+  console.log('='.repeat(50).green);
+});

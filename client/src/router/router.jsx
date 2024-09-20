@@ -1,15 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
-import Main from "../layout/Main";
-import Home from "../page/dashboard/Home";
-import GlobalRoom from "../page/dashboard/GlobalRoom";
+import HomeComponent from "../page/dashboard/HomeComponent/Home";
+import RoomComponent from "../page/dashboard/RoomComponent/GlobalRoom";
 import AuthFragment from '../page/Authentication/SignIn'
+import Signup from '../page/Authentication/Signup'
 import Room from "../layout/Room";
 import RoomHome from "../page/classroom/RoomHome";
-import StatProfile from "../page/dashboard/StatProfile";
+import ProfileComopnent from "../page/dashboard/ProfileComponent/StatProfile";
 import PrivateRouter from '../PrivateRouter/PrivateRouter'
-import EditProfile from "../page/dashboard/EditProfile";
 import TestPage from "../page/dashboard/TestPage";
-import VirtualRoom from '../page/virtualroom/VirtualRoom'
+import Layout from '../layout/layout'
 
 
 const router = createBrowserRouter([
@@ -18,24 +17,25 @@ const router = createBrowserRouter([
     element: <AuthFragment />,
   },
   {
-    path: "/editProfile",
-    element: <EditProfile />,
+    path: "/signup",
+    element: <Signup />,
   },
+ 
   {
     path: "main",
-    element: <PrivateRouter><Main /></PrivateRouter>,
+    element: <PrivateRouter><Layout /></PrivateRouter>,
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <HomeComponent />,
       },
       {
         path: "globalfragment",
-        element: <GlobalRoom />,
+        element: <RoomComponent />,
       },
       {
-        path: "statprofile",
-        element: <StatProfile />,
+        path: "ProfileComopnent",
+        element: <ProfileComopnent />,
       },
       {
         path: "testpage",
@@ -53,6 +53,7 @@ const router = createBrowserRouter([
     path: "room/:roomId",
     element: <PrivateRouter><Room /></PrivateRouter>,
   },
+  
 
 ]);
 

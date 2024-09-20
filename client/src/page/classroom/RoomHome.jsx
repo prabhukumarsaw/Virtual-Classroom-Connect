@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import wallpaper_1 from "../../assets/wallpaper/1.jpg";
-import wallpaper_2 from "../../assets/wallpaper/background.gif";
-import wallpaper_3 from "../../assets/wallpaper/library.png";
-import wallpaper_4 from "../../assets/wallpaper/maxresdefault.jpg";
-import wallpaper_5 from "../../assets/wallpaper/thumbnail.jpg";
+import wallpaper_1 from "/assets/wallpaper/1.jpg";
+import wallpaper_2 from "/assets/wallpaper/background.gif";
+import wallpaper_3 from "/assets/wallpaper/library.png";
+import wallpaper_4 from "/assets/wallpaper/maxresdefault.jpg";
+import wallpaper_5 from "/assets/wallpaper/thumbnail.jpg";
 import RoomNav from "./RoomNav";
 import Timer from "../../components/TimerWidget";
 import WidgetNav from "../../components/WidgetNav";

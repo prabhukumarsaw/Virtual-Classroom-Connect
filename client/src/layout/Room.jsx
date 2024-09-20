@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import VirtualRoom from '../page/classroom/RoomHome'
 import UserVideo from "../page/classroom/UserVideo";
-import { AuthContext } from "../context/AuthProvider";
+import { AuthContext } from "../context/AuthContext";
 import Spinner from "../components/Spinner";
 
 const Room = () => {

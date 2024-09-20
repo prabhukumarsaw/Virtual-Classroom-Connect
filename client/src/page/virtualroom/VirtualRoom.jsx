@@ -3,7 +3,7 @@ import { FaMicrophone, FaVideo, FaDesktop, FaUserFriends, FaEllipsisH, FaTimes }
 import { useNavigate, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import Peer from "simple-peer";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext } from "../../context/AuthContext";
 
 const Video = ({ peer, userVideo, videoRef }) => {
     const ref = useRef();
