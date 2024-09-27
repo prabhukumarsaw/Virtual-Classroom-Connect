@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -19,10 +19,14 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Users, Lock, Unlock, Eye, EyeOff } from "lucide-react";
 import { useInView } from "react-intersection-observer";
+import axiosInstance from "@/hooks/axiosInstance";
+import { useNavigate } from "react-router-dom";
+
 
 const EnhancedRoomCard = ({ room }) => {
   const {
     _id,
+    roomId,
     title,
     description,
     theme,
@@ -35,6 +39,7 @@ const EnhancedRoomCard = ({ room }) => {
 
   const [isHovered, setIsHovered] = useState(false);
   const [participantProgress, setParticipantProgress] = useState(0);
+  const [currentParticipants, setCurrentParticipants] = useState(participants);
   const [passcode, setPasscode] = useState("");
   const [showPasscode, setShowPasscode] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
@@ -43,9 +48,8 @@ const EnhancedRoomCard = ({ room }) => {
     rootMargin: "200px 0px",
   });
 
-  useEffect(() => {
-    setParticipantProgress((participants.length / maxParticipants) * 100);
-  }, [participants.length, maxParticipants]);
+  const navigate = useNavigate();
+
 
   const getBackgroundStyle = () => {
     if (Array.isArray(theme) && theme.length > 0) {
@@ -75,24 +79,44 @@ const EnhancedRoomCard = ({ room }) => {
     hover: { scale: 1.03, transition: { duration: 0.3 } },
   };
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
     if (roomType === "private") {
-      setIsJoining(true);
+      setIsJoining(true); // Prompt passcode for private rooms
     } else {
-      // Implement public room join logic here
-      console.log("Joining public room:", _id);
+      await joinRoomPublic(); // Automatically join public rooms
     }
   };
 
-  const handleSubmitPasscode = () => {
-    if (passcode !== room.passcode) {
-      alert("Incorrect passcode");
-      return;
+  const joinRoomPublic = async () => {
+    try {
+      const response = await axiosInstance.post(`/rooms/${roomId}/join`);
+      if (response.status !== 200) throw new Error("Failed to join room");
+
+      navigate(`/room/${roomId}`); // Redirect to the room
+    } catch (error) {
+      alert(error.message);
     }
-    // Implement successful join logic here
-    console.log("Joining private room:", _id);
-    setIsJoining(false);
   };
+
+  const handleSubmitPasscode = async () => {
+    try {
+      const response = await axiosInstance.post(`/rooms/${roomId}/join`, {
+        passcode,
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Failed to join room. Check passcode.");
+      }
+
+      navigate(`/room/${roomId}`); // Successfully joined, redirect to room
+      setIsJoining(false);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+
+
 
   const passcodeInputVariants = {
     hidden: { opacity: 0, height: 0, y: -20 },
@@ -143,7 +167,7 @@ const EnhancedRoomCard = ({ room }) => {
                 <TooltipTrigger>
                   <Badge variant="secondary" className="text-xs">
                     <Users className="w-3 h-3 mr-1" />
-                    {participants.length}/{maxParticipants}
+                    {currentParticipants.length}/{maxParticipants}
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -166,12 +190,8 @@ const EnhancedRoomCard = ({ room }) => {
             </AnimatePresence>
           </CardHeader>
           <CardContent className="p-4 space-y-4">
-
-          <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center">
               <h3 className="text-xl font-bold mb-2">{title}</h3>
-              {/* <p className="text-sm text-gray-300 line-clamp-2">
-                {description}
-              </p> */}
               <Tooltip>
                 <TooltipTrigger>
                   {roomType === "private" ? (
@@ -188,7 +208,6 @@ const EnhancedRoomCard = ({ room }) => {
               </Tooltip>
             </div>
 
-            
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Avatar className="border-2 border-white">
@@ -226,7 +245,7 @@ const EnhancedRoomCard = ({ room }) => {
                 </div>
               </div>
             </div>
-         
+
             <div className="flex justify-between items-center text-xs text-gray-400">
               <div></div>
             </div>
@@ -272,9 +291,14 @@ const EnhancedRoomCard = ({ room }) => {
             {!isJoining && (
               <Button
                 onClick={handleJoin}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105"
+                disabled={isJoining} // Disable while loading
+                className={`w-full ${
+                  isJoining
+                    ? "bg-gray-500"
+                    : "bg-gradient-to-r from-purple-500 to-pink-500"
+                } text-white font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105`}
               >
-                Join Room
+                {isJoining ? "Joining..." : "Join Room"}
               </Button>
             )}
           </CardFooter>

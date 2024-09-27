@@ -97,9 +97,9 @@ export default function Component() {
           description: "Virtual room created successfully!",
         });
         setIsOpen(false);
-        setTimeout(() => {
-          navigate(`/room/${response.data.room.roomId}`);
-        }, 1000);
+        // setTimeout(() => {
+        //   navigate(`/room/${response.data.room.roomId}`);
+        // }, 1000);
       }
       console.log("Room Detail", response.data);
     } catch (error) {

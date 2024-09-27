@@ -3,74 +3,83 @@ const { User } = require('../../models/User');
 const asyncHandler = require('../../utils/asyncHandler');
 const { validateRoomCreation, validateRoomJoin, validateMessage } = require('../../utils/validators');
 
-// Create a new room
+// Create Room
 exports.createRoom = asyncHandler(async (req, res) => {
   const { title, description, theme, roomType, passcode, maxParticipants } = req.body;
   const owner = req.user._id;
 
-  // Validation
+  // Validate input
   const { error } = validateRoomCreation({ title, description, theme, roomType, passcode, maxParticipants });
   if (error) return res.status(400).json({ success: false, message: error.message });
 
-  // Create the room
-  const room = new Room({ title, description, theme, roomType, passcode, maxParticipants, owner, participants: [owner] });
+  // Create room
+  const room = new Room({ title, description, theme, roomType, passcode, maxParticipants, owner });
   await room.save();
 
   res.status(201).json({ success: true, room });
 });
 
-
-// Join a room
+// Join Room
 exports.joinRoom = asyncHandler(async (req, res) => {
   const { roomId } = req.params;
   const userId = req.user._id;
   const { passcode } = req.body;
 
-  // Validation
-  const { error } = validateRoomJoin({ roomId });
-  if (error) return res.status(400).json({ success: false, message: error.message });
+  console.log(`User ${userId} attempting to join room ${roomId}`);
 
-  // Find the room
-  const room = await Room.findById(roomId).select('+passcode');
+  const room = await Room.findOne({ roomId }).select('+passcode');
   if (!room) return res.status(404).json({ success: false, message: 'Room not found' });
 
-  // Validate passcode if room is private
-  if (room.roomType === 'private' && !(await room.validatePasscode(passcode))) {
-    return res.status(403).json({ success: false, message: 'Invalid passcode' });
-  }
-
-  // Check if the user is already a participant
+  // Check if already a participant
   if (room.participants.includes(userId)) {
-    return res.status(400).json({ success: false, message: 'Already a member of this room' });
+    console.log(`User ${userId} is already a participant`);
+    return res.status(400).json({ success: false, message: 'Already a participant' });
   }
 
-  // Add user to room
-  room.participants.push(userId);
-  await room.save();
+  // Check room capacity
+  if (room.maxParticipants && room.participants.length >= room.maxParticipants) {
+    return res.status(403).json({ success: false, message: 'Room is full' });
+  }
 
+  // Private room validation
+  if (room.roomType === 'private') {
+    if (!passcode) return res.status(403).json({ success: false, message: 'Passcode required' });
+
+    const isPasscodeValid = await room.validatePasscode(passcode);
+    if (!isPasscodeValid) return res.status(403).json({ success: false, message: 'Invalid passcode' });
+  }
+
+  // Join room
+  await room.addParticipant(userId); // Add participant
   res.status(200).json({ success: true, room });
 });
 
-// Get list of rooms
-exports.getRooms = asyncHandler(async (req, res) => {
-  const rooms = await Room.find()
-    .populate('owner', 'name email profileImage bannerImage'); // Populate owner field with name and email
 
+// Get Rooms
+exports.getRooms = asyncHandler(async (req, res) => {
+  const rooms = await Room.find().populate('owner', 'name email profileImage bannerImage');
   res.status(200).json({ success: true, rooms });
 });
 
-
-// Get room details by ID
+// Get Room by roomId
 exports.getRoomById = asyncHandler(async (req, res) => {
-  const { roomId } = req.params;
+  const { roomId } = req.params; // Extract roomId from request parameters
 
-  const room = await Room.findById(roomId).populate('participants', 'name email');
-  if (!room) return res.status(404).json({ success: false, message: 'Room not found' });
+  // Find the room using the roomId field
+  const room = await Room.findOne({ roomId }) // Change to findOne
+    .populate('participants', 'name email'); // Populate participants' names and emails
 
+  // Check if the room exists
+  if (!room) {
+    return res.status(404).json({ success: false, message: 'Room not found' });
+  }
+
+  // Return the room details
   res.status(200).json({ success: true, room });
 });
 
-// Send a message in a room
+
+// Send Message
 exports.sendMessage = asyncHandler(async (req, res) => {
   const { roomId } = req.params;
   const { text } = req.body;
@@ -84,9 +93,32 @@ exports.sendMessage = asyncHandler(async (req, res) => {
   const room = await Room.findById(roomId);
   if (!room) return res.status(404).json({ success: false, message: 'Room not found' });
 
-  // Add message to room
+  // Add message (you could implement a Message model for this)
+  if (!room.messages) room.messages = [];
   room.messages.push({ user: userId, text });
   await room.save();
 
-  res.status(200).json({ success: true, message: 'Message sent successfully' });
+  res.status(200).json({ success: true, message: 'Message sent' });
 });
+
+// Leave Room
+exports.leaveRoom = asyncHandler(async (req, res) => {
+  const { roomId } = req.params;
+  const userId = req.user._id;
+
+  const room = await Room.findById(roomId);
+  if (!room) return res.status(404).json({ success: false, message: 'Room not found' });
+
+  // Remove user from participants
+  await room.removeParticipant(userId); // Call the method to remove participant
+
+  // Check if there are still participants left, if not delete room
+  if (room.participants.length === 0) {
+    await Room.deleteOne({ _id: room._id });
+    console.log(`Room ${room._id} deleted due to inactivity.`);
+  }
+
+  return res.status(200).json({ success: true, message: 'Successfully left the room' });
+});
+
+
