@@ -96,6 +96,7 @@ server.listen(PORT, () => {
   console.log('='.repeat(50).green);
   console.log(`
   🚀 Server is up and running!
+  🚀 Let's Go!
   🌐 Port: ${PORT}
   🔧 Environment: ${ENVIRONMENT}
   📅 Started on: ${new Date().toLocaleString()}
