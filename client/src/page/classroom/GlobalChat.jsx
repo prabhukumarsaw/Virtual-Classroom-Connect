@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IoSend } from "react-icons/io5";
 
-const GlobalChat = ({ isHidden }) => {
+const GlobalChat = ({ isHidden }, participants) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
@@ -13,10 +13,23 @@ const GlobalChat = ({ isHidden }) => {
   };
 
   return (
-    <div className={`container mx-auto mt-8 p-4 bg-gray-100 border rounded-lg shadow-md ${isHidden ? 'hidden' : 'block'}`}>
+    <div className={`container mx-auto p-4 bg-gray-100 border rounded-lg shadow-md ${isHidden ? 'hidden' : 'block'}`}>
       <div className="h-64 overflow-y-auto border mb-4 p-2">
+      <ul>
+                    {participants.length > 0 ? (
+                      participants.map((participant) => (
+                        <li key={participant._id}>
+                          Participant: {participant.name} (ID: {participant._id}
+                          )
+                        </li>
+                      ))
+                    ) : (
+                      <li>No participants yet</li>
+                    )}
+                  </ul>
         {messages.map((message, index) => (
           <div key={index} className="mb-2">
+        
             <span className="font-bold">{message.user}:</span> {message.text}
           </div>
         ))}

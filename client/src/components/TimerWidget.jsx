@@ -51,7 +51,7 @@ const ResponsiveTimerWidget = ({ isHidden }) => {
   };
 
   return (
-    <div className={`container mx-auto mt-8 p-4 bg-gray-100 border rounded-lg shadow-md ${isHidden ? 'hidden' : 'block'}`}>
+    <div className={`container  p-4 bg-card/50 backdrop-blur-md rounded-lg shadow-md ${isHidden ? 'hidden' : 'block'}`}>
       
       <div className={`text-center text-4xl font-bold mb-4`}>
         {formatTime(duration)}

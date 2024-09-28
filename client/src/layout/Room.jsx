@@ -7,6 +7,7 @@ import { RoomContext } from "../context/RoomContext";
 import Spinner from "../components/Spinner";
 import { motion } from "framer-motion";
 import { useSocket } from "../hooks/useSocket";
+import { toast } from "sonner"
 
 const Room = () => {
   const { user } = useContext(AuthContext);
@@ -54,6 +55,8 @@ const Room = () => {
       };
     }
   }, [roomId, user, socket, _id]);
+
+  
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900">
       {loading ? (
@@ -69,6 +72,7 @@ const Room = () => {
             >
               <div className="h-full flex flex-col p-1">
                 <UserVideo />
+                
               </div>
             </motion.aside>
             <motion.main
@@ -77,8 +81,10 @@ const Room = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <VirtualRoom />
+            
+              <VirtualRoom participants={participants}/>
             </motion.main>
+          
           </div>
         </>
       )}
